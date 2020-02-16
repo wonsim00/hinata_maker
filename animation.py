@@ -1,54 +1,57 @@
-from utils import resource_path
+from scheduler import base_scheduler, walking_scheduler
 
 class animation:
     __obj = None
 
-    def __init__(self, *args, **kwargs):
-        self.__screenwidth = 0
-        self.__screenheight = 0
+    def __init__(self, *scheduler_types):
         self.__imagewidth = 0
         self.__imageheight = 0
-        self.__scheduler = None
-    
-    def __create_scheduler(self):
-        assert self.__imagewidth and self.__imageheight
-        assert self.__screenwidth and self.__screenheight
+        self.__screenwidth = 0
+        self.__screenheight = 0
 
-        im_w, im_h = self.__imagewidth, self.__imageheight
-        sc_w, sc_h = self.__screenwidth, self.__screenheight
+        assert len(scheduler_types)
 
-        x_range = (-im_w, sc_w, 9)
-        y_const = sc_h-im_h-50
-        flip_flop = False
-        while True:
-            for x in range(*x_range):
-                yield (flip_flop, x, y_const)
-                flip_flop = not flip_flop
+        self.__schedulers = []
+        for typ in scheduler_types:
+            temp = typ()
+            assert isinstance(temp, base_scheduler)
+            self.__schedulers.append(temp)
+        
+        self.__curr_scheduler = self.__schedulers[0]
     
     def get_images_path(self):
-        return [
-            (resource_path('hajime0.gif'), 'GIF'),
-            (resource_path('hajime1.gif'), 'GIF')]
-
-    @staticmethod
-    def get_animation():
-        if not animation.__obj:
-            animation.__obj = animation()
-        return animation.__obj
+        return self.__curr_scheduler.get_images_path()
     
     def get_next_state(self):
-        if not self.__scheduler:
-            self.__scheduler = self.__create_scheduler()
-        return next(self.__scheduler)
-    
-    def set_screensize(self, width, height):
-        if self.__screenwidth and self.__screenheight:
-            return
-        self.__screenwidth = width
-        self.__screenheight = height
+        return self.__curr_scheduler.get_next_state()
     
     def set_imagesize(self, width, height):
         if self.__imagewidth and self.__imageheight:
             return
         self.__imagewidth = width
         self.__imageheight = height
+        
+        for scheduler in self.__schedulers:
+            scheduler.set_parameters(
+                image_width = width,
+                image_height = height
+            )    
+
+    def set_screensize(self, width, height):
+        if self.__screenwidth and self.__screenheight:
+            return
+        self.__screenwidth = width
+        self.__screenheight = height
+
+        for scheduler in self.__schedulers:
+            scheduler.set_parameters(
+                screen_width = width,
+                screen_height = height
+            )
+
+    @staticmethod
+    def get_animation():
+        if not animation.__obj:
+            animation.__obj = animation(walking_scheduler)
+        return animation.__obj
+    

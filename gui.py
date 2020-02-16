@@ -31,7 +31,7 @@ class gif_frame(wx.Frame):
             self.__regions.append(wx.Region(raw_img))
         self.__prev = -1
 
-    def set_status(self, image_idx, x_pos, y_pos):
+    def set_state(self, image_idx, x_pos, y_pos):
         self.SetShape(self.__regions[image_idx])
         self.SetPosition((x_pos, y_pos))
         self.__images[image_idx].Show()
@@ -40,7 +40,6 @@ class gif_frame(wx.Frame):
             self.__images[self.__prev].Hide()
         self.__prev = image_idx
         self.Show()
-
 
 class gif_app(wx.App):
     def OnInit(self):
@@ -78,7 +77,7 @@ class gif_app(wx.App):
         
         while self.keep_going:
             try:
-                self.frame.set_status(*self.__animation.get_next_state())
+                self.frame.set_state(*self.__animation.get_next_state())
             except RuntimeError as e:
                 if err_msg in e.args:
                     break
