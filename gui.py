@@ -2,6 +2,7 @@ import wx
 import time
 
 from animation import animation
+from utils import resource_path
 
 class gif_frame(wx.Frame):
     def __init__(self, app, **kwargs):
@@ -50,7 +51,7 @@ class gif_app(wx.App):
         size, images = None, []
 
         for path, ext in images_path:
-            images.append(wx.Image(path, getattr(
+            images.append(wx.Image(resource_path(path), getattr(
                 wx, "BITMAP_TYPE_{}".format(ext))).ConvertToBitmap())
             if not size:
                 size = images[-1].GetSize()
