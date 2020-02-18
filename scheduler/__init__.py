@@ -1,2 +1,2 @@
 from .base_scheduler import base_scheduler
-from .walking_scheduler import walking_scheduler
+from .walking_scheduler import walking_scheduler, return_trip_scheduler

@@ -18,7 +18,11 @@ a = Analysis(['gui.py'],
 
 a.datas += [
     ('hajime0.gif', 'C:\\Users\\wonsim\\Documents\\hinata_maker\\hajime0.gif', 'DATA'),
-    ('hajime1.gif', 'C:\\Users\\wonsim\\Documents\\hinata_maker\\hajime1.gif', 'DATA')
+    ('hajime1.gif', 'C:\\Users\\wonsim\\Documents\\hinata_maker\\hajime1.gif', 'DATA'),
+    ('sprites\\hajime_right_0.gif', 'C:\\Users\\wonsim\\Documents\\hinata_maker\\sprites\\hajime_right_0.gif', 'DATA'),
+    ('sprites\\hajime_right_1.gif', 'C:\\Users\\wonsim\\Documents\\hinata_maker\\sprites\\hajime_right_1.gif', 'DATA'),
+    ('sprites\\hajime_left_0.gif', 'C:\\Users\\wonsim\\Documents\\hinata_maker\\sprites\\hajime_left_0.gif', 'DATA'),
+    ('sprites\\hajime_left_1.gif', 'C:\\Users\\wonsim\\Documents\\hinata_maker\\sprites\\hajime_left_1.gif', 'DATA'),
 ]
 
 pyz = PYZ(a.pure, a.zipped_data,
