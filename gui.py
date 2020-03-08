@@ -1,19 +1,38 @@
 import wx
+import wx.adv as adv
 import time
 
 from animation import animation
 from utils import resource_path
 
-class gif_frame(wx.Frame):
-    def __init__(self, app, **kwargs):
+class gif_task_bar_icon(adv.TaskBarIcon):
+    def __init__(self, app, *args):
+        super(gif_task_bar_icon, self).__init__()
         self.__app = app
 
+        img = wx.Image(
+            resource_path("hajime_face.gif"),
+            wx.BITMAP_TYPE_GIF
+        ).ConvertToBitmap()
+
+        self.__icon = wx.Icon(img)
+        self.SetIcon(self.__icon)
+
+        self.__menu = wx.Menu()
+        self.__menu.Append(wx.ID_ABORT, "test")
+    
+    def CreatePopupMenu(self):
+        return self.__menu
+
+class gif_frame(wx.Frame):
+    def __init__(self, app, **kwargs):
         super(gif_frame, self).__init__(
             None,
             title = "Hinata Maker",
             style = wx.STAY_ON_TOP | wx.FRAME_SHAPED, 
             **kwargs)
         self.SetBackgroundColour("black")
+        self.__app = app
     
     def OnCloseWindow(self, event):
         self.__app.keep_going = False
@@ -60,6 +79,10 @@ class gif_app(wx.App):
         self.frame = gif_frame(self, size = size)
         self.__raw_images = images
         self.keep_going = True
+
+        # self.task_bar_icon = gif_task_bar_icon(self, [
+        #     self
+        # ])
         return True
     
     def MainLoop(self):
