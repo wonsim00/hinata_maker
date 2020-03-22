@@ -18,7 +18,7 @@
 
     > python main.py
 
-아래 명령어를 실행하면 `gui.py`를 실행하는 데 필요한 코드 및 데이터를 묶어서 프로그램으로 만들어 줍니다:
+아래 명령어를 실행하면 `main.py`를 실행하는 데 필요한 코드 및 데이터를 묶어서 프로그램으로 만들어 줍니다:
 
     > python spec_gen.py
     > pyinstaller hinata_maker.spec
