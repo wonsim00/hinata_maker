@@ -1,6 +1,6 @@
 if __name__ == '__main__':
     path = __file__.split("\\")
-    assert path[-1] == 'hinata_maker'
+    assert path[-2] == 'hinata_maker'
     path[0] = path[0].upper()
     path = "\\\\".join(path[:-2])
 

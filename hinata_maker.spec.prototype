@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['gui.py'],
+a = Analysis(['main.py'],
              pathex=['{path}\\hinata_maker'],
              binaries=[],
              datas=[],
