@@ -3,10 +3,11 @@ import time
 
 from utils import resource_path
 from animation import animation
+from .app_abstract import gif_app_abstract
 from .frame import gif_frame
 from .task_bar_icon import gif_task_bar_icon
 
-class gif_app(wx.App):
+class gif_app(gif_app_abstract):
     """
     Defines wx.App object that controls the animated gif images.
     """
@@ -32,12 +33,19 @@ class gif_app(wx.App):
                 size = images[-1].GetSize()
             assert size == images[-1].GetSize()
         
-        self.frame = gif_frame(self, size = size)
+        self.__frame = gif_frame(self, size = size)
         self.__raw_images = images
-        self.keep_going = True
 
-        self.task_bar_icon = gif_task_bar_icon(self)
+        self.__task_bar_icon = gif_task_bar_icon(self)
         return True
+    
+    @property
+    def frame(self):
+        return self.__frame
+    
+    @property
+    def task_bar_icon(self):
+        return self.__task_bar_icon
     
     def MainLoop(self):
         """
@@ -54,7 +62,7 @@ class gif_app(wx.App):
         old = wx.EventLoop.GetActive()
         wx.EventLoop.SetActive(evtloop)
         
-        while self.keep_going:
+        while self._keep_going:
             self.frame.set_state(*self.__animation.get_next_state())
 
             while evtloop.Pending():

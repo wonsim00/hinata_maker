@@ -1,11 +1,13 @@
 import wx
 
+from .app_abstract import gif_app_abstract
+
 class gif_menu(wx.Menu):
     """
     Defines wx.Menu object for gif_task_bar_icon.
     """
 
-    def __init__(self, app):
+    def __init__(self, app: gif_app_abstract):
         super(gif_menu, self).__init__()
         self.__app = app
 

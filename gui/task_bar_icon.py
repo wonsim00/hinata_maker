@@ -2,6 +2,7 @@ import wx
 import wx.adv as adv
 
 from utils import resource_path
+from .app_abstract import gif_app_abstract
 from .menu import gif_menu
 
 class gif_task_bar_icon(adv.TaskBarIcon):
@@ -10,7 +11,7 @@ class gif_task_bar_icon(adv.TaskBarIcon):
     for controlling gif_frame object.
     """
 
-    def __init__(self, app):
+    def __init__(self, app: gif_app_abstract):
         super(gif_task_bar_icon, self).__init__()
         self.__app = app
 

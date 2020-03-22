@@ -1,12 +1,14 @@
 import wx
 
+from .app_abstract import gif_app_abstract
+
 class gif_frame(wx.Frame):
     """
     Defines wx.Frame object (window)
     for displaying animated gif images.
     """
 
-    def __init__(self, app, **kwargs):
+    def __init__(self, app: gif_app_abstract, **kwargs):
         super(gif_frame, self).__init__(
             None,
             title = "Hinata Maker",
@@ -27,7 +29,7 @@ class gif_frame(wx.Frame):
         Executed when close event on gif_frame object is detected.
         It destroys the window and terminates the app.
         """
-        self.__app.keep_going = False
+        self.__app.end_main_loop()
         self.Destroy()
     
     def prepare(self, raw_images):
