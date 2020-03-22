@@ -3,8 +3,8 @@ from .base_scheduler import base_scheduler
 class walking_scheduler(base_scheduler):
     def __init__(self):
         super(walking_scheduler, self).__init__([
-            ('hajime0.gif', 'GIF'),
-            ('hajime1.gif', 'GIF')
+            ('sprites/hajime_right_0.gif', 'GIF'),
+            ('sprites/hajime_right_1.gif', 'GIF')
         ])
     
     def _create_scheduler(self):

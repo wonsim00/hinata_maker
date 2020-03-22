@@ -5,6 +5,24 @@ import time
 from animation import animation
 from utils import resource_path
 
+class gif_menu(wx.Menu):
+    def __init__(self, app):
+        super(gif_menu, self).__init__()
+        self.__app = app
+
+        mi_exit = wx.MenuItem(self, wx.NewIdRef(), 'Exit')
+        self.Bind(wx.EVT_MENU, self.OnExit, mi_exit)
+        self.Append(mi_exit)
+    
+    def OnExit(self, event):
+        wx.PostEvent(
+            self.__app.frame.GetEventHandler(),
+            wx.PyCommandEvent(
+                wx.EVT_CLOSE.typeId, 
+                self.__app.frame.GetId()
+            )
+        )
+
 class gif_task_bar_icon(adv.TaskBarIcon):
     def __init__(self, app, *args):
         super(gif_task_bar_icon, self).__init__()
@@ -18,11 +36,19 @@ class gif_task_bar_icon(adv.TaskBarIcon):
         self.__icon = wx.Icon(img)
         self.SetIcon(self.__icon)
 
-        self.__menu = wx.Menu()
-        self.__menu.Append(wx.ID_ABORT, "test")
+        self.Bind(
+            adv.EVT_TASKBAR_RIGHT_DOWN,
+            self.OnRightDown
+        )
     
     def CreatePopupMenu(self):
-        return self.__menu
+        menu = gif_menu(self.__app)
+        return menu
+    
+    def OnRightDown(self, event):
+        menu = self.CreatePopupMenu()
+        self.PopupMenu(menu)
+        menu.Destroy()
 
 class gif_frame(wx.Frame):
     def __init__(self, app, **kwargs):
@@ -30,9 +56,16 @@ class gif_frame(wx.Frame):
             None,
             title = "Hinata Maker",
             style = wx.STAY_ON_TOP | wx.FRAME_SHAPED, 
-            **kwargs)
+            **kwargs
+        )
         self.SetBackgroundColour("black")
         self.__app = app
+
+        self.Bind(
+            wx.EVT_CLOSE,
+            self.OnCloseWindow,
+            self
+        )
     
     def OnCloseWindow(self, event):
         self.__app.keep_going = False
@@ -44,7 +77,8 @@ class gif_frame(wx.Frame):
 
         for raw_img in raw_images:
             image = wx.StaticBitmap(
-                self, bitmap = raw_img, pos = (-1, -1))
+                self, bitmap = raw_img, pos = (-1, -1)
+            )
             image.Hide()
 
             self.__images.append(image)
@@ -70,8 +104,12 @@ class gif_app(wx.App):
         size, images = None, []
 
         for path, ext in images_path:
-            images.append(wx.Image(resource_path(path), getattr(
-                wx, "BITMAP_TYPE_{}".format(ext))).ConvertToBitmap())
+            images.append(
+                wx.Image(
+                    resource_path(path),
+                    getattr(wx, "BITMAP_TYPE_{}".format(ext))
+                ).ConvertToBitmap()
+            )
             if not size:
                 size = images[-1].GetSize()
             assert size == images[-1].GetSize()
@@ -80,14 +118,10 @@ class gif_app(wx.App):
         self.__raw_images = images
         self.keep_going = True
 
-        # self.task_bar_icon = gif_task_bar_icon(self, [
-        #     self
-        # ])
+        self.task_bar_icon = gif_task_bar_icon(self)
         return True
     
     def MainLoop(self):
-        err_msg = "wrapped C/C++ object of type {} has been deleted".format(
-            self.frame.__class__.__name__)
         self.frame.prepare(self.__raw_images)
 
         image_size = self.__raw_images[0].Size
@@ -100,13 +134,7 @@ class gif_app(wx.App):
         wx.EventLoop.SetActive(evtloop)
         
         while self.keep_going:
-            try:
-                self.frame.set_state(*self.__animation.get_next_state())
-            except RuntimeError as e:
-                if err_msg in e.args:
-                    break
-                else:
-                    raise e
+            self.frame.set_state(*self.__animation.get_next_state())
 
             while evtloop.Pending():
                 evtloop.Dispatch()
