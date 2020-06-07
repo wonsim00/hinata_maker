@@ -3,10 +3,10 @@ from .base_scheduler import base_scheduler
 class cleaning_scheduler(base_scheduler):
     def __init__(self):
         super(cleaning_scheduler, self).__init__([
-            ('sprites/hajime_right_0.gif', 'GIF'),
-            ('sprites/hajime_right_1.gif', 'GIF'),
-            ('sprites/hajime_left_0.gif', 'GIF'),
-            ('sprites/hajime_left_1.gif', 'GIF')
+            ('sprites/hajime_clean_0.gif', 'GIF'),
+            ('sprites/hajime_clean_1.gif', 'GIF'),
+            ('sprites/hajime_clean_2.gif', 'GIF'),
+            ('sprites/hajime_clean_3.gif', 'GIF')
         ], "Cleaning Mode")
     
     def _create_scheduler(self):
