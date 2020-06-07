@@ -18,10 +18,7 @@ a = Analysis(['main.py'],
 
 a.datas += [
     ('hajime_face.gif', '{path}\\hinata_maker\\hajime_face.gif', 'DATA'),
-    ('sprites\\hajime_right_0.gif', '{path}\\hinata_maker\\sprites\\hajime_right_0.gif', 'DATA'),
-    ('sprites\\hajime_right_1.gif', '{path}\\hinata_maker\\sprites\\hajime_right_1.gif', 'DATA'),
-    ('sprites\\hajime_left_0.gif', '{path}\\hinata_maker\\sprites\\hajime_left_0.gif', 'DATA'),
-    ('sprites\\hajime_left_1.gif', '{path}\\hinata_maker\\sprites\\hajime_left_1.gif', 'DATA'),
+    {datas}
 ]
 
 pyz = PYZ(a.pure, a.zipped_data,
