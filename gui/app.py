@@ -20,6 +20,7 @@ class gif_app(gif_app_abstract):
 
         sizes, images = [], []
         for scheduler in self.__animation.get_schedulers():
+            scheduler.start_index = len(images)
             size = None
             for path, ext in scheduler.get_images_path():
                 images.append(
