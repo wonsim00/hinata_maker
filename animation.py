@@ -1,4 +1,4 @@
-from scheduler import base_scheduler, return_trip_scheduler
+from scheduler import base_scheduler, return_trip_scheduler, cleaning_scheduler
 
 class animation:
     __obj = None
@@ -44,6 +44,8 @@ class animation:
     @staticmethod
     def get_animation():
         if not animation.__obj:
-            animation.__obj = animation(return_trip_scheduler)
+            animation.__obj = animation(
+                return_trip_scheduler
+            )
         return animation.__obj
     
