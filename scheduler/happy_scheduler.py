@@ -12,5 +12,5 @@ class happy_scheduler(base_scheduler):
         y_const = 500
         odd = False
         while True:
-            yield (odd, x_const, y_const)
+            yield (self.start_index+odd, x_const, y_const)
             odd = not odd

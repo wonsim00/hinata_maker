@@ -5,12 +5,15 @@ class animation:
 
     def __init__(self, *scheduler_types):
         super(animation, self).__init__()
-        assert len(scheduler_types)
+        if not len(scheduler_types):
+            raise RuntimeError("Please select at least one mode to show!")
 
         self.__schedulers = []
         for typ in scheduler_types:
             temp = typ()
-            assert isinstance(temp, base_scheduler)
+            if not isinstance(temp, base_scheduler):
+                raise RuntimeError(
+                    "The type {} is not a proper scheduler type.".format(typ.__name__))
             self.__schedulers.append(temp)
         
         self.__curr_index = 0

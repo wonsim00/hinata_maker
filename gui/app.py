@@ -23,6 +23,7 @@ class gif_app(gif_app_abstract):
         for scheduler in self.__animation.get_schedulers():
             scheduler.start_index = len(images)
             size = None
+            
             for path, ext in scheduler.get_images_path():
                 images.append(
                     wx.Image(
@@ -30,13 +31,21 @@ class gif_app(gif_app_abstract):
                         getattr(wx, "BITMAP_TYPE_{}".format(ext))
                     ).ConvertToBitmap()
                 )
+                
                 if not size:
                     size = images[-1].GetSize()
-                assert size == images[-1].GetSize()
+                if size != images[-1].GetSize():
+                    raise RuntimeError("The size {} of image {} does not match {}.".format(
+                        images[-1].GetSize(), path, size
+                    ))
+            
             sizes.append(size)
+        
+        if not len(images):
+            raise RuntimeError("No images to load!")
+        
         max_width = max(map(itemgetter(0), sizes))
         max_height = max(map(itemgetter(1), sizes))
-        
         self.__frame = gif_frame(self, size = (max_width, max_height))
         self.__sizes = sizes
         self.__raw_images = images

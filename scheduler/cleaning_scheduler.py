@@ -15,7 +15,10 @@ class cleaning_scheduler(base_scheduler):
         sc_w = self.screen_width
         sc_h = self.screen_height
 
-        assert im_w and im_h and sc_w and sc_h
+        if im_w <= 0 or im_h <= 0:
+            raise RuntimeError("The image size is not set properly!")
+        if sc_w <= 0 or sc_h <= 0:
+            raise RuntimeError("The screen size is not set properly!")
 
         pixel_per_step = 9
         steps = (sc_w-im_w)//2//pixel_per_step-1
