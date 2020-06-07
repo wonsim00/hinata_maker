@@ -32,7 +32,7 @@ class cleaning_scheduler(base_scheduler):
             -pixel_per_step
         )
         y_const = sc_h-im_h-50
-        yield (0, blank, y_const)
+        yield (self.start_index, blank, y_const)
 
         odd = True
         while True:

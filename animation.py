@@ -1,4 +1,4 @@
-from scheduler import base_scheduler, return_trip_scheduler, cleaning_scheduler
+from scheduler import *
 
 class animation:
     __obj = None
