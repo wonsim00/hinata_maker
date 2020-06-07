@@ -16,6 +16,10 @@ class animation:
         self.__curr_index = 0
         self.__curr_scheduler = self.__schedulers[self.__curr_index]
     
+    @property
+    def curr_index(self):
+        return self.__curr_index
+    
     def get_next_state(self):
         return self.__curr_scheduler.get_next_state()
     
