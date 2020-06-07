@@ -17,28 +17,33 @@ class gif_app(gif_app_abstract):
         Initializes the app.
         """
         self.__animation = animation.get_animation()
-        images_path = self.__animation.get_images_path()
 
-        assert len(images_path)
-        size, images = None, []
-
-        for path, ext in images_path:
-            images.append(
-                wx.Image(
-                    resource_path(path),
-                    getattr(wx, "BITMAP_TYPE_{}".format(ext))
-                ).ConvertToBitmap()
-            )
-            if not size:
-                size = images[-1].GetSize()
-            assert size == images[-1].GetSize()
+        sizes, images = [], []
+        for scheduler in self.__animation.get_schedulers():
+            size = None
+            for path, ext in scheduler.get_images_path():
+                images.append(
+                    wx.Image(
+                        resource_path(path),
+                        getattr(wx, "BITMAP_TYPE_{}".format(ext))
+                    ).ConvertToBitmap()
+                )
+                if not size:
+                    size = images[-1].GetSize()
+                assert size == images[-1].GetSize()
+            sizes.append(size)
         
-        self.__frame = gif_frame(self, size = size)
+        self.__frame = gif_frame(self, size = sizes[0])
+        self.__sizes = sizes
         self.__raw_images = images
 
         self.__task_bar_icon = gif_task_bar_icon(self)
         return True
     
+    @property
+    def animation(self):
+        return self.__animation
+
     @property
     def frame(self):
         return self.__frame
@@ -53,8 +58,7 @@ class gif_app(gif_app_abstract):
         """
         self.frame.prepare(self.__raw_images)
 
-        image_size = self.__raw_images[0].Size
-        self.__animation.set_imagesize(*image_size)
+        self.__animation.set_imagesize(*self.__sizes)
         screen_size = wx.GetDisplaySize()
         self.__animation.set_screensize(*screen_size)
         

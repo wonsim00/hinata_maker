@@ -4,11 +4,7 @@ class animation:
     __obj = None
 
     def __init__(self, *scheduler_types):
-        self.__imagewidth = 0
-        self.__imageheight = 0
-        self.__screenwidth = 0
-        self.__screenheight = 0
-
+        super(animation, self).__init__()
         assert len(scheduler_types)
 
         self.__schedulers = []
@@ -17,37 +13,33 @@ class animation:
             assert isinstance(temp, base_scheduler)
             self.__schedulers.append(temp)
         
-        self.__curr_scheduler = self.__schedulers[0]
-    
-    def get_images_path(self):
-        return self.__curr_scheduler.get_images_path()
+        self.__curr_index = 0
+        self.__curr_scheduler = self.__schedulers[self.__curr_index]
     
     def get_next_state(self):
         return self.__curr_scheduler.get_next_state()
     
-    def set_imagesize(self, width, height):
-        if self.__imagewidth and self.__imageheight:
-            return
-        self.__imagewidth = width
-        self.__imageheight = height
-        
+    def get_schedulers(self):
         for scheduler in self.__schedulers:
-            scheduler.set_parameters(
-                image_width = width,
-                image_height = height
-            )    
+            yield scheduler
 
-    def set_screensize(self, width, height):
-        if self.__screenwidth and self.__screenheight:
+    def set_curr_scheduler(self, index: int):
+        if self.__curr_index == index:
             return
-        self.__screenwidth = width
-        self.__screenheight = height
+        self.__curr_index = index
+        self.__curr_scheduler = self.__schedulers[index]
+        self.__curr_scheduler.reset_scheduler()
+    
+    def set_imagesize(self, *images_size):
+        for image_size, scheduler in zip(images_size, self.__schedulers):
+            image_width, image_height = image_size
+            scheduler.image_width = image_width
+            scheduler.image_height = image_height
 
+    def set_screensize(self, width: int, height: int):
         for scheduler in self.__schedulers:
-            scheduler.set_parameters(
-                screen_width = width,
-                screen_height = height
-            )
+            scheduler.screen_width = width
+            scheduler.screen_height = height
 
     @staticmethod
     def get_animation():
