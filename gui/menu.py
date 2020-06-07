@@ -10,11 +10,23 @@ class gif_menu(wx.Menu):
     def __init__(self, app: gif_app_abstract):
         super(gif_menu, self).__init__()
         self.__app = app
+        
+        schedule_index = {}
+        for idx, scheduler in enumerate(app.animation.get_schedulers()):
+            mi_swap = wx.MenuItem(self, wx.NewIdRef(), scheduler.menu_name)
+            schedule_index[mi_swap.Id] = idx
+            self.Bind(wx.EVT_MENU, self.OnSwap, mi_swap)
+            self.Append(mi_swap)
+        self.__schedule_index = schedule_index
 
         mi_exit = wx.MenuItem(self, wx.NewIdRef(), 'Exit')
         self.Bind(wx.EVT_MENU, self.OnExit, mi_exit)
         self.Append(mi_exit)
     
+    def OnSwap(self, event):
+        self.__app.animation.set_curr_scheduler(
+            self.__schedule_index[event.Id])
+
     def OnExit(self, event):
         """
         Executed when selecting "Exit".

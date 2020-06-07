@@ -1,5 +1,6 @@
 import wx
 import time
+from operator import itemgetter
 
 from utils import resource_path
 from animation import animation
@@ -33,8 +34,10 @@ class gif_app(gif_app_abstract):
                     size = images[-1].GetSize()
                 assert size == images[-1].GetSize()
             sizes.append(size)
+        max_width = max(map(itemgetter(0), sizes))
+        max_height = max(map(itemgetter(1), sizes))
         
-        self.__frame = gif_frame(self, size = sizes[0])
+        self.__frame = gif_frame(self, size = (max_width, max_height))
         self.__sizes = sizes
         self.__raw_images = images
 

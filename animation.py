@@ -45,7 +45,8 @@ class animation:
     def get_animation():
         if not animation.__obj:
             animation.__obj = animation(
-                return_trip_scheduler
+                return_trip_scheduler,
+                cleaning_scheduler
             )
         return animation.__obj
     

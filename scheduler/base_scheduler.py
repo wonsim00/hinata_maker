@@ -50,6 +50,10 @@ class base_scheduler:
         if self.__screen_height < 0:
             self.__screen_height = value
 
+    @property
+    def menu_name(self):
+        return self._menu_name
+
     def _create_scheduler(self, *args, **kwargs):
         raise NotImplementedError
 
