@@ -30,5 +30,4 @@
 ## 문의
 
 * GitHub 이슈 페이지 : <https://github.com/wonsim00/hinata_maker/issues>
-* 트위터 : <https://twitter.com/wonsim00>
 * 포스타입 : <https://wonsim00.postype.com/>
